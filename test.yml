@@ -1,0 +1,19 @@
+connection:
+  url: jdbc:sqlite:/home/k/tmp/reporting.db
+  user: reporting
+  password: q1w2
+  driver: org.sqlite.JDBC
+
+reports:
+  - name: raport_pdf
+    query: select * from users;
+    format: pdf
+    filename: report.pdf
+  - name: raport_html
+    query: select * from users;
+    format: html
+    filename: report.html
+  - name: raport_xlsx
+    query: select * from users;
+    format: xlsx
+    filename: report.xlsx

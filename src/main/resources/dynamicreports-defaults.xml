@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DynamicReports>
+<!-- 
+	<font fontName="DejaVu Serif" fontSize="10" pdfFontName="Helvetica"
+		pdfEncoding="UTF-8" pdfEmbedded="true" />
+ -->		
+	<bigDecimalType pattern="#,##0.00#" horizontalAlignment="RIGHT" />
+	<dateType pattern="dd-MM-yyyy" horizontalAlignment="RIGHT" />
+</DynamicReports>
