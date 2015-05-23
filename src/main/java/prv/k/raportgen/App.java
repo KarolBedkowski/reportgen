@@ -20,16 +20,16 @@ import prv.k.raportgen.domain.Report;
  *
  */
 public class App {
-	final static Logger LOG = LoggerFactory.getLogger(App.class);
+	private final static Logger LOG = LoggerFactory.getLogger(App.class);
 
-	public static void main(String[] args) throws IOException {
+	public static void main(final String[] args) throws IOException {
 		if (args.length != 1) {
-			System.out.println("Usage: <connfig.yml>");
+			LOG.error("Missing argiment; Usage: <connfig.yml>");
 			return;
 		}
 
 		// laod configuration
-		Configuration config = loadConfiguration(args[0]);
+		final Configuration config = loadConfiguration(args[0]);
 		if (config == null) {
 			return;
 		}
@@ -54,17 +54,18 @@ public class App {
 			// generate
 			for (Report report : config.getReports()) {
 				LOG.info("Generating report {}", report.getName());
-				ReportGenerator rgen = new ReportGenerator(report);
+				final ReportGenerator rgen = new ReportGenerator(report);
 				rgen.execute(conn);
 				LOG.info("Report {} DONE", report.getName());
 			}
 		} catch (SQLException err) {
-			System.out.println(err.toString());
+			LOG.error("Generate raport error", err);
 		} finally {
 			if (conn != null) {
 				try {
 					conn.close();
 				} catch (SQLException e) {
+					LOG.debug("Close connection) error", e);
 				}
 			}
 		}

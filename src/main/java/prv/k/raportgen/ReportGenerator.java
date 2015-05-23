@@ -25,16 +25,24 @@ import org.slf4j.LoggerFactory;
 
 import prv.k.raportgen.domain.Report;
 
+/**
+ * Report generation methods.
+ * 
+ * @author k
+ *
+ */
 public class ReportGenerator {
 
-	final static Logger LOG = LoggerFactory.getLogger(ReportGenerator.class);
-	private Report report;
+	private final static Logger LOG = LoggerFactory
+			.getLogger(ReportGenerator.class);
 
-	public ReportGenerator(Report report) {
+	transient private final Report report;
+
+	public ReportGenerator(final Report report) {
 		this.report = report;
 	}
 
-	public void execute(Connection conn) {
+	public void execute(final Connection conn) {
 		try {
 			JasperReportBuilder rapbuilder = genReport(conn);
 			rapbuilder = configureColumns(rapbuilder, conn);
@@ -59,6 +67,7 @@ public class ReportGenerator {
 			default: {
 				LOG.error("Invalid dst format {} for {}", report.getFormat(),
 						report.getName());
+				break;
 			}
 			}
 		} catch (Exception e) {
@@ -66,17 +75,17 @@ public class ReportGenerator {
 		}
 	}
 
-	protected JasperReportBuilder genReport(Connection connection) {
+	protected JasperReportBuilder genReport(final Connection connection) {
 		final JasperReportBuilder reportBuilder = DynamicReports.report();
 		final StyleBuilder baseStyle = stl.style();
 		baseStyle.setFontName("FreeSans");
 		baseStyle.setPadding(5);
 		reportBuilder.setTextStyle(baseStyle);
 
-		StyleBuilder boldStyle = stl.style(baseStyle).bold();
-		StyleBuilder boldCenteredStyle = stl.style(boldStyle)
+		final StyleBuilder boldStyle = stl.style(baseStyle).bold();
+		final StyleBuilder boldCenteredStyle = stl.style(boldStyle)
 				.setHorizontalAlignment(HorizontalAlignment.CENTER);
-		StyleBuilder columnTitleStyle = stl.style(boldCenteredStyle)
+		final StyleBuilder columnTitleStyle = stl.style(boldCenteredStyle)
 				.setBorder(stl.pen1Point())
 				.setBackgroundColor(Color.LIGHT_GRAY);
 
@@ -97,10 +106,10 @@ public class ReportGenerator {
 			stmt.setMaxRows(0);
 			rset = stmt.executeQuery(report.getQuery());
 
-			ResultSetMetaData meta = rset.getMetaData();
+			final ResultSetMetaData meta = rset.getMetaData();
 			for (int col = 1; col <= meta.getColumnCount(); col++) {
-				String colName = meta.getColumnName(col);
-				String colLabel = meta.getColumnLabel(col);
+				final String colName = meta.getColumnName(col);
+				final String colLabel = meta.getColumnLabel(col);
 				DRIDataType type;
 				switch (meta.getColumnType(col)) {
 				case Types.INTEGER:
@@ -125,6 +134,7 @@ public class ReportGenerator {
 					break;
 				default:
 					type = DataTypes.stringType();
+					break;
 				}
 				builder.addColumn(Columns.column(colLabel, colName, type));
 			}
@@ -136,12 +146,14 @@ public class ReportGenerator {
 				try {
 					rset.close();
 				} catch (SQLException e) {
+					LOG.debug("Rset close error", e);
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
 				} catch (SQLException e) {
+					LOG.debug("Stmt close error", e);
 				}
 			}
 		}
