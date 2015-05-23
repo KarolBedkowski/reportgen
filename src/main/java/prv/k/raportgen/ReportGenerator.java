@@ -81,8 +81,8 @@ public class ReportGenerator {
 				.setBackgroundColor(Color.LIGHT_GRAY);
 
 		return reportBuilder.setDataSource(report.getQuery(), connection)
-				.title(cmp.text("Users").setStyle(boldCenteredStyle))
-				.pageFooter(cmp.pageXofY())
+				.title(cmp.text(report.getName()).setStyle(boldCenteredStyle))
+				// .pageFooter(cmp.pageXofY())
 				.setColumnTitleStyle(columnTitleStyle)
 				.highlightDetailEvenRows();
 	}
