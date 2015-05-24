@@ -1,4 +1,4 @@
-package prv.k.raportgen.domain;
+package prv.k.reportgen.domain;
 
 import java.util.List;
 

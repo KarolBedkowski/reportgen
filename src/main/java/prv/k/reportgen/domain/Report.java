@@ -1,4 +1,4 @@
-package prv.k.raportgen.domain;
+package prv.k.reportgen.domain;
 
 public class Report {
 	private String name;

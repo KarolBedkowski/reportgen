@@ -1,4 +1,4 @@
-package prv.k.raportgen;
+package prv.k.reportgen;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
-import prv.k.raportgen.domain.Configuration;
-import prv.k.raportgen.domain.Report;
+import prv.k.reportgen.domain.Configuration;
+import prv.k.reportgen.domain.Report;
 
 /**
  * Hello world!

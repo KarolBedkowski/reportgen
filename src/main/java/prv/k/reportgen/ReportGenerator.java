@@ -1,9 +1,8 @@
-package prv.k.raportgen;
+package prv.k.reportgen;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 
-import java.awt.Color;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,7 +22,7 @@ import net.sf.dynamicreports.report.definition.datatype.DRIDataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import prv.k.raportgen.domain.Report;
+import prv.k.reportgen.domain.Report;
 
 /**
  * Report generation methods.
@@ -86,19 +85,21 @@ public class ReportGenerator {
 		final StyleBuilder boldCenteredStyle = stl.style(boldStyle)
 				.setHorizontalAlignment(HorizontalAlignment.CENTER);
 		final StyleBuilder columnTitleStyle = stl.style(boldCenteredStyle)
-				.setBorder(stl.pen1Point())
-				.setBackgroundColor(Color.LIGHT_GRAY);
+				.setBorder(stl.penThin());
+		// .setBackgroundColor(Color.LIGHT_GRAY);
+		final StyleBuilder textStyle = stl.style(baseStyle).setBorder(
+				stl.penThin());
 
 		return reportBuilder.setDataSource(report.getQuery(), connection)
 				.title(cmp.text(report.getName()).setStyle(boldCenteredStyle))
 				// .pageFooter(cmp.pageXofY())
-				.setColumnTitleStyle(columnTitleStyle)
-				.highlightDetailEvenRows();
+				.setColumnTitleStyle(columnTitleStyle).setTextStyle(textStyle);
+		// .highlightDetailEvenRows();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected JasperReportBuilder configureColumns(
-			JasperReportBuilder builder, Connection connection) {
+	protected JasperReportBuilder configureColumns(JasperReportBuilder builder,
+			Connection connection) {
 		Statement stmt = null;
 		ResultSet rset = null;
 		try {
