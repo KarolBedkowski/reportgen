@@ -28,9 +28,13 @@ public class App {
 			return;
 		}
 
-		// laod configuration
+		// load configuration
 		final Configuration config = loadConfiguration(args[0]);
 		if (config == null) {
+			return;
+		}
+
+		if (!config.validate()) {
 			return;
 		}
 
@@ -84,4 +88,5 @@ public class App {
 		Yaml yaml = new Yaml();
 		return yaml.loadAs(in, Configuration.class);
 	}
+
 }

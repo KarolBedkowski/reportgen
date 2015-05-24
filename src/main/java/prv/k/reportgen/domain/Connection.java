@@ -1,6 +1,11 @@
 package prv.k.reportgen.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Connection {
+
+	private static final Logger LOG = LoggerFactory.getLogger(Connection.class);
 
 	private String url;
 	private String user;
@@ -45,4 +50,24 @@ public class Connection {
 				+ password + ", driver=" + driver + "]";
 	}
 
+	public boolean validate() {
+		boolean result = true;
+		if (url == null || url.isEmpty()) {
+			LOG.error("Configuration: missing connection -> url");
+			result = false;
+		}
+		if (user == null || user.isEmpty()) {
+			LOG.error("Configuration: missing connection -> user");
+			result = false;
+		}
+		if (password == null || password.isEmpty()) {
+			LOG.error("Configuration: missing connection -> password");
+			result = false;
+		}
+		if (driver == null || driver.isEmpty()) {
+			LOG.error("Configuration: missing connection -> driver");
+			result = false;
+		}
+		return result;
+	}
 }

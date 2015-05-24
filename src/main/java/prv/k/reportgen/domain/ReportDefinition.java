@@ -18,4 +18,13 @@ public class ReportDefinition {
 		return "ReportDefinition [columns=" + columns + "]";
 	}
 
+	public boolean validate(String parentName) {
+		boolean result = true;
+		if (columns != null && columns.size() > 0) {
+			for (Column column : columns) {
+				result &= column.validate(parentName + " -> definition");
+			}
+		}
+		return result;
+	}
 }
