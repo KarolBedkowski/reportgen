@@ -22,7 +22,9 @@ import net.sf.dynamicreports.report.definition.datatype.DRIDataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import prv.k.reportgen.domain.Column;
 import prv.k.reportgen.domain.Report;
+import prv.k.reportgen.domain.ReportDefinition;
 
 /**
  * Report generation methods.
@@ -44,7 +46,12 @@ public class ReportGenerator {
 	public void execute(final Connection conn) {
 		try {
 			JasperReportBuilder rapbuilder = genReport(conn);
-			rapbuilder = configureColumns(rapbuilder, conn);
+			if (report.hasColumnDefinition()) {
+				rapbuilder = configureColumnsFromConf(rapbuilder);
+			} else {
+				// guess columns
+				rapbuilder = configureColumns(rapbuilder, conn);
+			}
 			String dstFile = report.getFilename();
 			switch (report.getFormat()) {
 			case "html": {
@@ -72,6 +79,43 @@ public class ReportGenerator {
 		} catch (Exception e) {
 			LOG.error("Report generating error", e);
 		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected JasperReportBuilder configureColumnsFromConf(
+			JasperReportBuilder builder) {
+		ReportDefinition definition = report.getDefinition();
+		for (Column column : definition.getColumns()) {
+			DRIDataType type;
+			switch (column.getType() != null ? column.getType() : "") {
+			case "integer":
+			case "decimal":
+			case "numeric":
+				type = DataTypes.integerType();
+				break;
+			case "double":
+				type = DataTypes.doubleType();
+				break;
+			case "float":
+				type = DataTypes.doubleType();
+				break;
+			case "date":
+				type = DataTypes.dateType();
+				break;
+			case "time":
+				type = DataTypes.timeHourToSecondType();
+				break;
+			case "timestamp":
+				type = DataTypes.dateYearToSecondType();
+				break;
+			default:
+				type = DataTypes.stringType();
+				break;
+			}
+			builder.addColumn(Columns.column(column.getLabel(),
+					column.getName(), type));
+		}
+		return builder;
 	}
 
 	protected JasperReportBuilder genReport(final Connection connection) {

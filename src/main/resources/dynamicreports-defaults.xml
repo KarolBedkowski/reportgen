@@ -6,4 +6,15 @@
  -->		
 	<bigDecimalType pattern="#,##0.00#" horizontalAlignment="RIGHT" />
 	<dateType pattern="dd-MM-yyyy" horizontalAlignment="RIGHT" />
+	<dateYearToMonthType pattern="MM-yyyy" horizontalAlignment="RIGHT"/>  
+	<dateYearToHourType pattern="dd-MM-yyyy hh" horizontalAlignment="RIGHT"/>
+	<dateYearToMinuteType pattern="dd-MM-yyyy hh:mm" horizontalAlignment="RIGHT"/>
+	<dateYearToSecondType pattern="dd-MM-yyyy hh:mm:ss" horizontalAlignment="RIGHT"/>
+	<dateYearToFractionType pattern="dd-MM-yyyy hh:mm:ss,SSS" horizontalAlignment="RIGHT"/> 
+	<dateYearType pattern="yyyy" horizontalAlignment="RIGHT"/>
+	<dateMonthType pattern="MMMM" horizontalAlignment="RIGHT"/>
+	<dateDayType pattern="dd" horizontalAlignment="RIGHT"/>       
+	<timeHourToMinuteType pattern="hh:mm " horizontalAlignment="RIGHT"/>
+	<timeHourToSecondType pattern="hh:mm:ss" horizontalAlignment="RIGHT"/>
+	<timeHourToFractionType pattern="hh:mm:ss,SSS" horizontalAlignment="RIGHT"/>  
 </DynamicReports>

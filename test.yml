@@ -13,6 +13,16 @@ reports:
     query: select * from users;
     format: html
     filename: report.html
+    definition:
+      columns:
+        - name: id
+          label: Id
+          type: number
+        - name: endDate
+          label: End Date 
+          type: timestamp
+        - name: name
+          label: Name
   - name: raport_xlsx
     query: select * from users;
     format: xlsx

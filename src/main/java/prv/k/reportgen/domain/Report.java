@@ -6,6 +6,8 @@ public class Report {
 	private String format;
 	private String filename;
 
+	private ReportDefinition definition;
+
 	public String getName() {
 		return name;
 	}
@@ -38,10 +40,28 @@ public class Report {
 		this.filename = filename;
 	}
 
+	public ReportDefinition getDefinition() {
+		return definition;
+	}
+
+	public void setDefinition(ReportDefinition definition) {
+		this.definition = definition;
+	}
+
+	public boolean hasColumnDefinition() {
+		if (definition == null) {
+			return false;
+		}
+		if (definition.getColumns() != null) {
+			return definition.getColumns().size() > 0;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		return "Report [name=" + name + ", query=" + query + ", format="
-				+ format + ", filename=" + filename + "]";
+				+ format + ", filename=" + filename + ", definition="
+				+ definition + "]";
 	}
-
 }
