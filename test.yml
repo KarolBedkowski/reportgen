@@ -1,10 +1,4 @@
 # java -classpath ./raportgen-0.0.1-SNAPSHOT.jar:./lib/sqlite-jdbc-3.7.2.jar prv.k.reportgen.App test.yml
-connection:
-  url: jdbc:sqlite:/home/k/tmp/reporting.db
-  user: reporting
-  password: q1w2
-  driver: org.sqlite.JDBC
-
 reports:
   - name: raport_pdf
     query: select * from users;

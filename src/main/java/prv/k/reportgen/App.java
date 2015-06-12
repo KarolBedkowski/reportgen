@@ -2,11 +2,15 @@ package prv.k.reportgen;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.SequenceInputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +27,13 @@ public class App {
 	private final static Logger LOG = LoggerFactory.getLogger(App.class);
 
 	public static void main(final String[] args) throws IOException {
-		if (args.length != 1) {
-			LOG.error("Missing argiment; Usage: <connfig.yml>");
+		if (args.length == 0) {
+			LOG.error("Missing argiment; Usage: <connfig.yml> [<connfig.yml>...]");
 			return;
 		}
 
 		// load configuration
-		final Configuration config = loadConfiguration(args[0]);
+		final Configuration config = loadConfiguration(args);
 		if (config == null) {
 			return;
 		}
@@ -76,11 +80,15 @@ public class App {
 		LOG.info("All done");
 	}
 
-	private static Configuration loadConfiguration(String filename) {
-		LOG.debug("Loading configuration from {}", filename);
+	private static Configuration loadConfiguration(String[] filenames) {
 		InputStream in;
 		try {
-			in = Files.newInputStream(Paths.get(filename));
+			List<InputStream> instrList = new ArrayList<InputStream>();
+			for (String fname : filenames) {
+				LOG.debug("Loading configuration from {}", fname);
+				instrList.add(Files.newInputStream(Paths.get(fname)));
+			}
+			in = new SequenceInputStream(Collections.enumeration(instrList));
 		} catch (IOException e) {
 			LOG.error("Load configuration error", e);
 			return null;
