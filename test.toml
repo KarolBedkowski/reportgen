@@ -1,0 +1,30 @@
+# java -classpath ./raportgen-0.0.1-SNAPSHOT.jar:./lib/sqlite-jdbc-3.7.2.jar prv.k.reportgen.App test.yml
+[[reports]]
+  name = "raport_pdf"
+  query = "select * from users;"
+  format = "pdf"
+  filename = "report.pdf"
+
+[[reports]]
+  name = "raport_html"
+  query = "select * from users;"
+  format = "html"
+  filename = "report.html"
+  [reports.definition]
+    [[reports.definition.columns]]
+      name = "id"
+      label = "Id"
+      type = "number"
+    [[reports.definition.columns]]
+      name = "endDate"
+      label = "End Date "
+      type = "timestamp"
+    [[reports.definition.columns]]
+      name = "name"
+      label = "Name"
+
+[[reports]]
+  name = "raport_xlsx"
+  query = "select * from users;"
+  format = "xlsx"
+  filename = "report.xlsx"

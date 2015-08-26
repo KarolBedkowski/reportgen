@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.Yaml;
+import com.moandjiezana.toml.Toml;
 
 import prv.k.reportgen.domain.Configuration;
 import prv.k.reportgen.domain.Report;
@@ -93,8 +93,12 @@ public class App {
 			LOG.error("Load configuration error", e);
 			return null;
 		}
+		/*
 		Yaml yaml = new Yaml();
 		return yaml.loadAs(in, Configuration.class);
+		*/
+		Configuration conf = new Toml().parse(in).to(Configuration.class);
+		return conf;
 	}
 
 }
