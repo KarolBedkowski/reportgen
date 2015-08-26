@@ -1,5 +1,10 @@
 package prv.k.reportgen.domain;
 
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +18,7 @@ public class Report {
 	private ReportDefinition definition;
 
 	public String getName() {
-		return name;
+		return formatString(name);
 	}
 
 	public void setName(String name) {
@@ -37,10 +42,11 @@ public class Report {
 	}
 
 	public String getFilename() {
-		if (filename == null || filename.isEmpty()) {
-			return name + "." + format;
+		String output = filename;
+		if (output == null || output.isEmpty()) {
+			output = name + "." + format;
 		}
-		return filename;
+		return formatString(output);
 	}
 
 	public void setFilename(String filename) {
@@ -109,5 +115,26 @@ public class Report {
 			result &= definition.validate("Report " + name);
 		}
 		return result;
+	}
+
+	private static String formatString(String inp) {
+		Calendar cal = Calendar.getInstance();
+		DateFormat fmtDate = SimpleDateFormat.getDateInstance();
+		DateFormat fmtTime = SimpleDateFormat.getTimeInstance();
+		inp = inp
+				.replaceAll("%y", String.valueOf(cal.get(Calendar.YEAR)))
+				.replaceAll("%m",
+						String.format("%02d", cal.get(Calendar.MONTH)))
+				.replaceAll("%d",
+						String.format("%02d", cal.get(Calendar.DAY_OF_MONTH)))
+				.replaceAll("%H",
+						String.format("%02d", cal.get(Calendar.HOUR_OF_DAY)))
+				.replaceAll("%M",
+						String.format("%02d", cal.get(Calendar.MINUTE)))
+				.replaceAll("%S",
+						String.format("%02d", cal.get(Calendar.SECOND)))
+				.replaceAll("%x", fmtDate.format(cal.getTime()))
+				.replaceAll("%X", fmtTime.format(cal.getTime()));
+		return inp;
 	}
 }
