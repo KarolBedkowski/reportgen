@@ -12,12 +12,15 @@ import java.sql.Statement;
 import java.sql.Types;
 
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.jasper.constant.JasperProperty;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.column.Columns;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.WhenNoDataType;
 import net.sf.dynamicreports.report.definition.datatype.DRIDataType;
+import net.sf.jasperreports.engine.JRParameter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,10 +137,19 @@ public class ReportGenerator {
 		final StyleBuilder textStyle = stl.style(baseStyle).setBorder(
 				stl.penThin());
 
+		reportBuilder.setIgnorePagination(true)
+			.setIgnorePageWidth(true)
+			.setParameter(JRParameter.IS_IGNORE_PAGINATION, Boolean.TRUE)
+			.setParameter(JasperProperty.EXPORT_XLS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.FALSE)
+			.setParameter(JasperProperty.EXPORT_XLS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.FALSE)
+			.addParameter("net.sf.jasperreports.export.detect.cell.type", "true")
+			;
+
 		return reportBuilder.setDataSource(report.getQuery(), connection)
 				.title(cmp.text(report.getName()).setStyle(boldCenteredStyle))
 				// .pageFooter(cmp.pageXofY())
-				.setColumnTitleStyle(columnTitleStyle).setTextStyle(textStyle);
+				.setColumnTitleStyle(columnTitleStyle).setTextStyle(textStyle)
+				.setWhenNoDataType(WhenNoDataType.ALL_SECTIONS_NO_DETAIL);
 		// .highlightDetailEvenRows();
 	}
 
@@ -181,7 +193,11 @@ public class ReportGenerator {
 					type = DataTypes.stringType();
 					break;
 				}
-				builder.addColumn(Columns.column(colLabel, colName, type));
+				builder.addColumn(Columns.column(colLabel, colName, type)
+						.setStretchWithOverflow(false)
+						.addProperty(JasperProperty.PRINT_KEEP_FULL_TEXT, "true")
+						.addProperty("net.sf.jasperreports.export.xls.wrap.text", "false")
+						);
 			}
 
 		} catch (SQLException err) {
